@@ -1,65 +1,87 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>JavaScript loan Caliculator</title>
-    <style> /* CSS スタイルシート。プログラムの出力にスタイルを設定する。 */
-        .otput { font-weight: bold;}
-        #payment { text-decoration: underline; }
-        #graph { border: solid black 1px;}
-        th, td { vertical-align: top;}
+    <style>
+        /* CSS スタイルシート。プログラムの出力にスタイルを設定する。 */
+        
+        .otput {
+            font-weight: bold;
+        }
+        
+        #payment {
+            text-decoration: underline;
+        }
+        
+        #graph {
+            border: solid black 1px;
+        }
+        
+        th,
+        td {
+            vertical-align: top;
+        }
     </style>
 </head>
+
 <body>
     <!--
         この HTML テーブル中には，ユーザーがデータを入力するための <imput> 要素と，プログラムが計算結果を表示するための <span> 要素が含まれる。
         これらの要素は，「interest」 や 「years」 のような id をもつ。　この id を使って， JavaScript コードはテーブルを検索する。　入力要素のいくつかには， 「oncange」 や 「onclick」 イベントハンドラが定義されていることに注意。このイベントハンドラで，ユーザーがデータを入力したりクリックしたりしたときに実行する JavaScript コードを指定する。
         -->
 
-        <table>
-            <tr>
-                <th>Enter Loan Data:</th>
+    <table>
+        <tr>
+            <th>Enter Loan Data:</th>
             <td></td>
-            <th>Loan Balance, Cimulative Equity, and Interest Payments</th></tr>
-            <tr>
-                <td>Amount of the loan ($):</td>
-                <td> <input id="amount" onchange="calculate();" </td>
-                <td rowspan=8 ><canvas id="graph" width="400" height="250"></canvas></td>
-            </tr>
-                <tr>
-                    <td>Annual interest (%):</td>
-                    <td><input id="apr" onchange="calculate();"></td>
-                </tr>
-                <tr>
-                    <td>Repayment pariod (years):</td>
-                    <td><input id="years" onchange="calculate();"></td>
-                </tr>
-                <tr>
-                    <td>Zipcode (to find lenders):</td>
-                    <td><input id="zipcode" onchange="calculate();"></td>
-                </tr>
-                <tr>
-                    <th>Approximate Payments:</th>
-                    <td><button onclick="caliculate();">Caliculate</button></td>
-                </tr>
-                <tr>
-                    <td>Monthry payment:</td>
-                    <td>$<span class="output" id="payment"></span></td>
-                </tr>
-                <tr>
-                    <td>Total payment:</td>
-                    <td>$<span class="output" id="total"></span></td>
-                </tr>
-                <tr>
-                    <td>Total interestp</td>
-                    <td>$<span class="output" id="totalinterest"></span></td>
-                </tr>
-                <tr>
-                    <th>Sponsors:</th>
-                    <td colspan=2 >Apply for your loan with one of these fine lenders:
-                    <div id="lenders"></div></td>
-                </tr>
-        </table>
-        <script src="caliculate.js"></script>
+            <th>Loan Balance, Cimulative Equity, and Interest Payments</th>
+        </tr>
+        <tr>
+            <td>Amount of the loan ($):</td>
+            <td> <input id="amount" onchange="calculate();" </td>
+                <td rowspan=8>
+                    <canvas id="graph" width="400" height="250"></canvas>
+                </td>
+        </tr>
+        <tr>
+            <td>Annual interest (%):</td>
+            <td><input id="apr" onchange="calculate();"></td>
+        </tr>
+        <tr>
+            <td>Repayment pariod (years):</td>
+            <td><input id="years" onchange="calculate();"></td>
+        </tr>
+        <tr>
+            <td>Zipcode (to find lenders):</td>
+            <td><input id="zipcode" onchange="calculate();"></td>
+        </tr>
+        <tr>
+            <th>Approximate Payments:</th>
+            <td><button onclick="caliculate();">Caliculate</button></td>
+        </tr>
+        <tr>
+            <td>Monthry payment:</td>
+            <td>$<span class="output" id="payment"></span></td>
+        </tr>
+        <tr>
+            <td>Total payment:</td>
+            <td>$<span class="output" id="total"></span></td>
+        </tr>
+        <tr>
+            <td>Total interestp</td>
+            <td>$<span class="output" id="totalInterest"></span></td>
+        </tr>
+        <tr>
+            <th>Sponsors:</th>
+            <td colspan=2>
+                Appli for your loan with one of these fine lenders:
+                <div id="length"></div>
+            </td>
+        </tr>
+    </table>
+    <script src="caliculate.js"></script>
 </body>
+
 </html>
