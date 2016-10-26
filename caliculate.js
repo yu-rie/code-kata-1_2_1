@@ -13,7 +13,7 @@ function calculate(){
   var zipcode = document.getElementById('zipcode');
   var payment = document.getElementById('payment');
   var total = document.getElementById('total');
-  var totalInterest = document.getElementById('totalInterelt');
+  var totalInterest = document.getElementById('totalInterest');
 
   // 入力要素からユーザーの入力を取得する。データはすべて正しいと想定。
 
@@ -35,7 +35,7 @@ function calculate(){
     totalInterest.innerHTML = ((monthly * payments)- principal).toFixed(2);
 
     // 次回ユーザーが再度訪問したときに元に戻せるように入力を保存する。
-    save(amount.value, apr.value, apr.value, years.value, zipcode.value);
+    save(amount.value, apr.value, years.value, zipcode.value);
 
     // 広告表示:地元の金融業者を検索して表示。ネットワークエラーは無視。
     try{  // 中括弧中で発生したエラーをキャッチする。
@@ -57,10 +57,20 @@ function calculate(){
 
 /**
  * ユーザーの入力を localStorage オブジェクトのプロパティに保存する。
- * これらのプロパティは，ユーザーが将来再度訪問したときまで存続する。このストレージ
- * 機能は， file:// URL で実行した場合は， firefox などの一部のブラウザで動作しない。
+ * これらのプロパティは，ユーザーが再度訪問した時まで存続する。このストレージ
+ * 機能は， file:// URL で実行した場合は， Firefox などの一部のブラウザで動作しない。
  * ただし， HTTP 経由の場合は問題なく動作する。
  */
+function save(amount, apr, years, zipcode){
+  if (window.localStorage){
+    localStorage.loan_amount = amount;
+    localStorage.loan_apr = apr;
+    localStorage.loan_years = years;
+    localStorage.loan_zipcode = zipcode;
+  }
+}
+
+// ドキュメントが読み込まれた時に自動的に入力フィールドを元に戻す。
 window.onload = function() {
   //　ブラウザが linalStrage をサポートしていて，データが保存されていれば，
   if (window.localStorage && localStorage.loan_amount) {
@@ -163,7 +173,40 @@ function chart(principal, interest, monthly,payments){
   g.fill();                                     // 曲線より下の部分を塗りつぶす。
   g.fillText('Total Equity', 20, 35);           // 緑色でラベルをつける。
 
+// 前述した内容と同様の処理。ただし，ローン残高は太い黒色の線で引く。
+  var bal = principal;
+  g.beginPath();
+  g.moveTo(paymentToX(0),amountToY(bal));
+  for(var p = 1; p <= payments; p++) {
+    var thisMonthsInterest = bal * interest;
+    bal -= (monthry - thisMonthsInterest);      // 残りが元本。
+    g.lineTo(paymentToX(p).amountToY(bal));     // ここまで線を引く。
+  }
+  g.lineWith = 3;                               // 太い線を使う。
+  g.stroke();                                   // 残高曲線を描く。
+  g.fillStyle = "black";                        // テキスト表示色を黒色に変更する。
+  g.fillText("Loan Balance", 20, 50);           // 凡例を表示する。
 
+  // ここで X 座標の目盛と，年数を描く。
+  g.textAlign = "center";                       // 目盛り上のテキストを中央揃えにする。
+  var y = amountToX(0);                         // X 軸の Y 座標。
+  for(var year = 1; year * 12 <= payments; year++) {  // 年ごとに
+    var x = paymentToX(year*12);                // 目盛計算をする。
+    g.fillRect(x - 0.5 , Y-3, 1, 3);            // 目盛を描画する。
+    if (year == 1) g.fillText("Year", x, y-5);  // X 座標にラベルをつける。
+    if (year % 5 == 0 && year * 12 !== payments)// 5 年ごとに数値を描画。
+    g.fillText(string(year), x, y-5);
+  }
 
+  // 右端に支払額を描画する。
+  g.textAlign = "right";                        // テキストを右寄せ表示する。
+  g.textBaseline = "middle";                    // 垂直方向には中央表示する。
+  var ticks = [monthly * payments, ptincipal];  // ラベルは 2 つ付ける。
+  var rightEdge = paymentToX(payments);         // Y 軸の X 座標。
+  for (var i = 0; i < ticks.length; i++){       // ラベルごとに，
+    var y = amountToY(ticks[i]);                // 目標の Y 座標を計算する。
+    g.fillRect(rightEdge - 3, y - 0.5, 3, 1);   // 目盛を描画する。
+    g.fillText(String(tichs[i].toFixed(0)),     // ラベルを付ける。
+    rightEdge-s, y );
+  }
 }
-
